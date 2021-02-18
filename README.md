@@ -7,6 +7,8 @@ Two different repository implementation exist in the service:
  * H2
 
 Operation results of widgets are same, they do not depend on the storage type.
+
+This app is written with Java 11 & SpringBoot framework.
  
 ### Build the app
     $ mvn clean install
