@@ -45,4 +45,5 @@ As default, the application will start at port 8080.
 ### Tests
 There are both unit test & integration tests written and can be find under **/test**
 Here is a test coverage of the service:
+
 ![Test Coverage](test-coverage.png)
