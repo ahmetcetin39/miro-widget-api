@@ -1,5 +1,6 @@
 package com.miro.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,10 +22,13 @@ import java.time.LocalDateTime;
 public class Widget {
     private Long id;
 
+    @JsonProperty("xIndex")
     private Integer xIndex;
 
+    @JsonProperty("yIndex")
     private Integer yIndex;
 
+    @JsonProperty("zIndex")
     private Integer zIndex;
 
     private Integer width;
@@ -32,7 +36,7 @@ public class Widget {
     private Integer height;
 
     private LocalDateTime updateTime;
-
+    
     public static Widget mapRowToWidget(ResultSet resultSet, int rowNum) throws SQLException {
         return Widget.builder()
                 .id(resultSet.getLong("id"))

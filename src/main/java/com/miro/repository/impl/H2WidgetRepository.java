@@ -31,13 +31,13 @@ import java.util.Optional;
 @Profile("h2")
 @RequiredArgsConstructor
 public class H2WidgetRepository implements WidgetRepository {
-    private static final int QUERY_RESULT_SUCCESS = 1;
-    private static final String QUERY_SELECT_MAX_Z_INDEX = "select max(zIndex) from widget";
+    static final String QUERY_SELECT_MAX_Z_INDEX = "select max(zIndex) from widget";
+    static final String QUERY_DELETE_WIDGET = "delete from widget where id=?";
     private static final String QUERY_SELECT_BY_Z_INDEX = "select * from widget where zIndex=?";
-    private static final String QUERY_UPDATE_Z_INDEXES = "update widget set zIndex = zIndex + 1 where id=?";
     private static final String QUERY_INSERT_WIDGET = "insert into widget (xIndex, yIndex, zIndex, width, height, updateTime) values(?,?,?,?,?,?)";
+    private static final int QUERY_RESULT_SUCCESS = 1;
+    private static final String QUERY_UPDATE_Z_INDEXES = "update widget set zIndex = zIndex + 1 where id=?";
     private static final String QUERY_UPDATE_WIDGET = "update widget set xIndex=?, yIndex=?, zIndex=?, width=?, height=?, updateTime=? where id = ?";
-    private static final String QUERY_DELETE_WIDGET = "delete from widget where id=?";
     private static final String QUERY_SELECT_BY_ID = "select * from widget where id=?";
     private static final String QUERY_SELECT_BY_LIMIT = "select * from widget order by zIndex limit ?";
     private static final String QUERY_SELECT_BY_COORDINATE_AND_LIMIT = "select * from widget " +
@@ -53,14 +53,11 @@ public class H2WidgetRepository implements WidgetRepository {
             shift(widget.getZIndex());
         }
 
-        if (widget.getId() == null) {   // This is a create operation
-            if (widget.getZIndex() == null) {
-                widget.setZIndex(getMaxZIndex() + 1);
-            }
-            return saveWidget(widget);
-        } else {                        // This is an update operation
-            return updateWidget(widget);
+        if (widget.getZIndex() == null) {
+            widget.setZIndex(getMaxZIndex() + 1);
         }
+
+        return widget.getId() == null ? saveWidget(widget) : updateWidget(widget);
     }
 
     @Override
@@ -84,7 +81,6 @@ public class H2WidgetRepository implements WidgetRepository {
         return jdbcTemplate.query(QUERY_SELECT_BY_LIMIT,
                 Widget::mapRowToWidget, limit);
     }
-
 
     @Override
     public List<Widget> findWithCoordinates(RectangleCoordinates coordinates, Integer limit) {
@@ -129,7 +125,9 @@ public class H2WidgetRepository implements WidgetRepository {
             return ps;
         }, keyHolder);
 
-        widget.setId((long) keyHolder.getKey());
+        if (keyHolder.getKey() != null) {
+            widget.setId(keyHolder.getKey().longValue());
+        }
         return widget;
     }
 

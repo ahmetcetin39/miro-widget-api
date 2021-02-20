@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author ahmetcetin
  */
 @Repository
-@Profile("in-memory")
+@Profile({"in-memory", "default"})
 @RequiredArgsConstructor
 public class InMemoryRepository implements WidgetRepository {
     private static volatile Long widgetIdCounter = 0L;
@@ -137,5 +137,10 @@ public class InMemoryRepository implements WidgetRepository {
                 && widget.getXIndex() + halfWidth <= coordinates.getX1()
                 && widget.getYIndex() - halfHeight >= coordinates.getY0()
                 && widget.getYIndex() + halfHeight <= coordinates.getY1();
+    }
+
+    void clearMaps() {
+        widgetDB.clear();
+        zIndexDB.clear();
     }
 }

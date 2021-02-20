@@ -48,11 +48,11 @@ public class WidgetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Widget>> getAll(@RequestParam(required = false, defaultValue = DEFAULT_LIMIT) Integer limit,
-                                               @RequestParam(required = false) Integer x0,
-                                               @RequestParam(required = false) Integer y0,
-                                               @RequestParam(required = false) Integer x1,
-                                               @RequestParam(required = false) Integer y1) {
+    public ResponseEntity<List<Widget>> findAll(@RequestParam(required = false, defaultValue = DEFAULT_LIMIT) Integer limit,
+                                                @RequestParam(required = false) Integer x0,
+                                                @RequestParam(required = false) Integer y0,
+                                                @RequestParam(required = false) Integer x1,
+                                                @RequestParam(required = false) Integer y1) {
         validateLimit(limit);
 
         // All four points need to be provided
