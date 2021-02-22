@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -48,6 +49,7 @@ public class H2WidgetRepository implements WidgetRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
+    @Transactional
     public Widget save(Widget widget) {
         if (widget.getZIndex() != null && findByZIndex(widget.getZIndex()).isPresent()) { // Shifting required.
             shift(widget.getZIndex());
